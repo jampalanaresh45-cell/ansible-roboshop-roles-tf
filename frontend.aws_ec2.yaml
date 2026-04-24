@@ -1,0 +1,15 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - us-east-1
+filters:
+  tag:Name: frontend
+  instance-state-name: running
+hostnames:
+  - private-ip-address
+compose:
+ ### This sets the ansible_host variable to the private ip address of the instance. This is required because we are running ansible from a jump host and the instances are in private subnet. 
+  ansible_host: private-ip-address
+keyed_groups:
+  - key: tags.Name
+    prefix: "dynamic" ## Dynamic_frontend ##
+    separator: "_"
